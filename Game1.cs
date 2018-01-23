@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace Game1
 {
@@ -14,13 +17,20 @@ namespace Game1
 
         private Texture2D background;
         private Texture2D cyndaquil;
-        private Texture2D something;
 
+        Sprite cyndaquilImage;
+        Character PlayerOne;
+
+        KeyboardState oldKeyboardState;
+
+        //Vector2 is an object provided by the XNA framework, used to store 2D positional information
+        //Texture2D is an object provided by XNA framework, used to hold image content loaded by the Content Pipeline
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+  
         }
 
         /// <summary>
@@ -33,6 +43,9 @@ namespace Game1
         {
             // TODO: Add your initialization logic here
 
+            //sprite object created
+            PlayerOne= new Character();
+            
             base.Initialize();
         }
 
@@ -45,8 +58,16 @@ namespace Game1
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            PlayerOne.LoadContent(this.Content, "Characters/Cyndaquil");
+
+
+            //cyndaquilImage.Position = new Vector2(125, 245);
+
             // TODO: use this.Content to load your game content here
-            Texture2D image = Content.Load<Texture2D>("Characters/Cyndaquil");
+
+            //Texture2D image = Content.Load<Texture2D>("Characters/Cyndaquil");
+
+
 
             //For a small game, you may not ever need to unload any content in your game. 
             //However, if you have a big game, you can't just keep loading more and more content and expect it to keep working. 
@@ -56,7 +77,7 @@ namespace Game1
             //Content.Unload();
 
             background = Content.Load<Texture2D>("Backgrounds/200px-Hoenn_Route_101_RS");
-            cyndaquil = Content.Load<Texture2D>("Characters/Cyndaquil");
+            //cyndaquil = Content.Load<Texture2D>("Characters/Cyndaquil");
         }
 
         /// <summary>
@@ -79,8 +100,14 @@ namespace Game1
                 Exit();
 
             // TODO: Add your update logic here
+            PlayerOne.Update(gameTime);
 
             base.Update(gameTime);
+        }
+
+        private void UpdateInput()
+        {
+            KeyboardState newState = Keyboard.GetState();
         }
 
         /// <summary>
@@ -98,7 +125,9 @@ namespace Game1
             //800 x 480 is width and height by default
             //color.white is for not having our image tinted at all
             spriteBatch.Draw(background, new Rectangle(0, 0, 800, 480), Color.White);
-            spriteBatch.Draw(cyndaquil, new Rectangle(200, 300, 50, 50), Color.White);
+            //spriteBatch.Draw(cyndaquil, new Rectangle(200, 300, 50, 50), Color.White);
+
+            PlayerOne.Draw(this.spriteBatch);
 
             spriteBatch.End();
 
